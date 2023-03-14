@@ -25,46 +25,44 @@
             </div>
         </form>
 
-        <?php
-            //Capturamos el evento del form
-            if (isset($_POST['btnbuscador']))
-            {
-                $valorabuscar = $_POST['inputTxt'];
-                //Conexion al Sevidor y a la Base de datos...
-                include "php/conexion.php";
-                $linkConexion = conection();
 
-                //Construimos la consulta ...
-                $sql = "SELECT * FROM informacion WHERE informacion LIKE '%$valorabuscar%' AND activo='1'";
-                $resultados = mysqli_query($linkConexion, $sql);
-                echo '<h5 class="text-center">Resultados obtenidos:</h5>';
-                echo '<table class="table table-striped table-hover">';
-                echo '<thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Libro</th>
-                            <th scope="col">Link</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
-                while ($row = mysqli_fetch_array($resultados))
-                {
-                    $idinf = $row['idinformacion'];
-                    $inf = $row['informacion'];
-                    $inflink = $row['linkarchivo'];
-                    echo '<tr>';
-                    echo '<td>'.$idinf.'</td>';
-                    echo '<td>'.$inf.'</td>';
-                    echo '<td><a href="archivos/'.$inflink.'" target="blank">'.$inf.'</a></td>';
-                    echo '</tr>';
-                }
-                echo '</tbody></table>';
+<?php if (isset($_POST['btnbuscador'])) {
+    $valorabuscar = $_POST['inputTxt'];
+    //Conexion al Sevidor y a la Base de datos...
+    include 'php/conexion.php';
+    $linkConexion = conection();
 
-                //Cerramos la Conexion a la BD
-                mysqli_close($linkConexion);
-            }
-        ?>
+    $sql = "SELECT * FROM detalles_informacion d INNER JOIN informacion i ON i.idinformacion= d.idinformacion WHERE nombrelibro LIKE '%$valorabuscar%'";
+    $resultados = mysqli_query($linkConexion, $sql);
+    echo '<h5 class="text-center">Resultados obtenidos:</h5>';
+    echo '<table class="table table-striped table-hover">';
+    echo '<thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Libro</th>
+                    <th scope="col">Link</th>
+                </tr>
+            </thead>
+            <tbody>';
+    while ($row = mysqli_fetch_array($resultados)) {
+        $idinf = $row['idinformacion'];
+        $inf = $row['nombrelibro'];
+        $inflink = $row['fecha'];
+        echo '<tr>';
+        echo '<td>' . $idinf . '</td>';
+        echo '<td>' . $inf . '</td>';
+        echo '<td><a href="archivos/' .
+            $inflink .
+            '" target="_blank">' .
+            $inflink .
+            '</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table>';
 
+    //Cerramos la Conexion a la BD
+    mysqli_close($linkConexion);
+} ?>
     
     </div>
     <!-- Bootstrap JS -->

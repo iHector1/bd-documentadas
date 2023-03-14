@@ -32,7 +32,9 @@
         $Libro_pdf = 'archivos/' . $nuevoNombre_Libro;
 
         //Insertamos los datos en la tabla ...
-        $Sql = "INSERT INTO informacion(informacion, linkarchivo, activo) VALUES('$nlibro', '$nuevoNombre_Libro', '1')";
+        $Sql = "INSERT INTO `informacion` (idinformacion, activo, fecha) VALUES ($idmayor, 1, NOW());";
+        $resultados = mysqli_query($linkConexion, $Sql);
+        $Sql = "INSERT INTO detalles_informacion(idinformacion, nombrelibro) VALUES('$idmayor', '$nuevoNombre_Libro')";
         $resultados = mysqli_query($linkConexion, $Sql);
 
         //Se mueve el archivo al Servidor ...
